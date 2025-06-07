@@ -6,6 +6,7 @@
 
 export const publicRoutes = [
   "/",
+  "/new-verification"
 ];
 
 /**
@@ -16,7 +17,7 @@ export const publicRoutes = [
 export const authRoutes = [
   "/login",
   "/register",
-  "/autherror"
+  "/autherror",
 ];
 
 /**

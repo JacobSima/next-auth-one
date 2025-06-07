@@ -9,26 +9,34 @@ import { UserRole } from "@prisma/client";
 export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/login",
-    error:'/autherror',
+    error: '/autherror',
   },
   events: {
-    async linkAccount({user}) {
+    async linkAccount({ user }) {
       await db.user.update({
-        where: {id: user.id},
-        data: {emailVerified: new Date()}
+        where: { id: user.id },
+        data: { emailVerified: new Date() }
       });
     }
   },
   callbacks: {
-    // async signIn({ user }) {
-    //   const existingUser = await getUserById(user.id);
+    async signIn({ user, account }) {
+      // Allow OAuth without email verification(Github, Google)
+      if (account?.provider !== "credentials") {
+        return true;
+      }
 
-    //   if (!existingUser || !existingUser.emailVerified) {
-    //     return false;
-    //   }
+      const existingUser = await getUserById(user.id);
 
-    //   return true;
-    // },
+      // Prevent sign it without email verification
+      if (!existingUser || !existingUser.emailVerified) {
+        return false;
+      }
+
+      //TODO: add 2FA check
+
+      return true;
+    },
 
     async jwt({ token }) {
       if (!token.sub) {
