@@ -20,11 +20,18 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/actions/login";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const [isPending, startTransition] = useTransition();
+
+  let oauthError = searchParams.get("error") === "OAuthAccountNotLinked"
+    ? "Email already in use with different provider"
+    : "";
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -36,6 +43,7 @@ const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
     setSuccess("");
+    oauthError = "";
 
     // login is the server action
     // Passing values from the client to the server
@@ -44,10 +52,9 @@ const LoginForm = () => {
       login(values)
         .then(data => {
           setError(data.error);
-          setSuccess(data.success);
+          setSuccess(data.success); //TODO: when 2FA added
         })
     })
-
   }
 
   return (
@@ -100,8 +107,8 @@ const LoginForm = () => {
               )}
             />
           </div>
-          <FormError message={error} />
-          <FormSuccess message={success}/>
+          <FormError message={error || oauthError} />
+          <FormSuccess message={success} />
           <Button
             type="submit"
             className="w-full"
