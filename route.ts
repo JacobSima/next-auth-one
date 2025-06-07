@@ -6,7 +6,7 @@
 
 export const publicRoutes = [
   "/",
-  "/new-verification"
+  "/new-verification",  // can be used for both logged in and logged out user
 ];
 
 /**
@@ -18,6 +18,8 @@ export const authRoutes = [
   "/login",
   "/register",
   "/autherror",
+  "/reset",
+  "/new-password",
 ];
 
 /**

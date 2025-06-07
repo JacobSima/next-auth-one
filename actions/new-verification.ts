@@ -23,8 +23,6 @@ export const newVerification = async (token: string) => {
     return {error: "Email does not exist!"};
   }
 
-
-
   const updateData =  db.user.update({
     where: {id: existingUser.id},
     data: {
