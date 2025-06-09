@@ -5,7 +5,7 @@ import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 import { getVerificationTokenByEmail } from "@/data/verification-token";
 import { getPasswordResetTokenByEmail } from "@/lib/password-reset-token";
 
-const anHour = 3600 * 1000;
+// const anHour = 3600 * 1000;
 const fiveMinute = 5 * 60 * 1000;
 
 export const setExpires = () => new Date(new Date().getTime() + fiveMinute);
