@@ -25,6 +25,7 @@ import Link from "next/link";
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -51,7 +52,7 @@ const LoginForm = () => {
     // Passing values from the client to the server
     // axios.post('/login')  // you can use axios here, but we prefer server action so that nextjs can handle this
     startTransition(() => {
-      login(values)
+      login(values, callbackUrl)
         .then(data => {
           if (data.error) {
             form.reset();
